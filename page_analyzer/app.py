@@ -21,6 +21,10 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 def welcome():
     return render_template('search.html')
 
-@app.route('/urls', methods=['POST'])
+@app.route('/urls', methods=['POST', 'GET'])
 def add_url():
+    return 'Здесь будет список urls'
 
+@app.route('/urls/<id>')
+def check_url(id):
+    return 'Здесь будет описание url с определенным id'
