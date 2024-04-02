@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% block content %}
 <h1>Сайты</h1>
 <div class="table-responsive">
@@ -18,8 +19,8 @@
               <a href="/urls/{{ url.id }}">
                 {{ url.name }}</a>
             </td>
-            <td>{{ url.last_chek if url.last_chek else '' }}</td>
-            <td>{{ url.status_code if url.status_code else '' }}</td>
+             <!--<td>{{ url.last_chek if url.last_chek else '' }}</td>
+            <td>{{ url.status_code if url.status_code else '' }}</td>-->
           </tr>
           {% endfor %}
       </tbody>

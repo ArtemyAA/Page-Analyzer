@@ -1,6 +1,6 @@
 from validators import url as check_valid
 from urllib.parse import urlparse
-from database_helper import already_exists
+from page_analyzer.database_helper import already_exists
 
 
 def parse_and_normalize(url):

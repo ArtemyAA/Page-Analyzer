@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Third project for hexlet. Flask app."
 authors = ["Artemy Ablaev <artemyablaev.gmail.com>"]
 readme = "README.md"
+packages = [{ include = "page_analyzer" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
