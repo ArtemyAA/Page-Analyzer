@@ -1,4 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
-Я 
+<div class="container-lg mt-3">
+    <h1>Сайт: {{ current_url.name }}</h1>
+
+  
+<div class="table-responsive">
+  <table class="table table-bordered table-hover text-nowrap" data-test="url">
+    <tbody>
+      <tr>
+        <td>ID</td>
+        <td>{{ current_url.id }}</td>
+      </tr>
+      <tr>
+        <td>Имя</td>
+        <td>{{ current_url.name }}</td>
+      </tr>
+      <tr>
+        <td>Дата создания</td>
+        <td>{{ current_url.created_at }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <h2 class="mt-5 mb-3">Проверки</h2>
+  <form method="post" action="/urls/3/checks">
+  <input type="submit" class="btn btn-primary" value="Запустить проверку">
+  </form>
+  
+<div>
+  <table class="table table-bordered table-hover mt-2" data-test="checks">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Код ответа</th>
+      <th>h1</th>
+      <th>title</th>
+      <th>description</th>
+      <th>Дата создания</th>
+    </tr>
+  </thead>
+    <tbody>
+  
+  </tbody>
+  </table>
+</div>
+
+  </div>
+  <h2 class="mt-5 mb-3">Проверки</h2>
+    <form method="post" action="/urls/3/checks">
+    <input type="submit" class="btn btn-primary" value="Запустить проверку">
+    </form>
+    
+  <div>
+    <table class="table table-bordered table-hover mt-2" data-test="checks">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Код ответа</th>
+        <th>h1</th>
+        <th>title</th>
+        <th>description</th>
+        <th>Дата создания</th>
+      </tr>
+    </thead>
+      <tbody>
+     <!--<tr>
+     <td>4</td>
+            <td>200</td>
+            <td>Online programming school</td>
+            <td>Programming education: online courses for beginners and advanced students</td>
+            <td>Live online community of programmers and developers. Author training programs with practice and finished projects in resumes. Hiring assistance after successful graduation</td>
+            <td>2024-04-02</td>
+        </tr>-->
+    </tbody>
+    </table>
+  </div>
+    </div>
 {% endblock %}
