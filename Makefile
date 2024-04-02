@@ -1,5 +1,7 @@
 install:
 	poetry install
+pack-install:
+	poetry install	
 	poetry build
 	poetry publish --dry-run
 	python3 -m pip install --user dist/*.whl --force-reinstall
