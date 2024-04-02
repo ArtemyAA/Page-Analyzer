@@ -6,11 +6,13 @@ from flask import (
     flash,
     get_flashed_messages
     )
-from validator import validate #сделать валидатор
-import os
+
+from validators import url
 from dotenv import load_dotenv
-import psycopg2
 from datetime import date
+import database_helper as dbh
+import os
+from validator import validate
 
 load_dotenv()
 app = Flask(__name__)
@@ -21,10 +23,26 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 def welcome():
     return render_template('search.html')
 
-@app.route('/urls', methods=['POST', 'GET'])
+@app.route('/urls', methods=['POST'])
 def add_url():
-    return 'Здесь будет список urls'
+    new_url = request.form.to_dict()
+
+    errors = validate(new_url)
+    if errors:
+        flash
+        return
+    new_url['created_at'] = date.today()
+    
+
+@app.route('/urls', methods=['GET'])
+def show_urls():
+
+
+
+
+    
 
 @app.route('/urls/<id>')
-def check_url(id):
+def get_url(id):
+    
     return 'Здесь будет описание url с определенным id'
