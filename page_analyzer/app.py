@@ -9,11 +9,12 @@ from dotenv import load_dotenv
 from datetime import date
 import page_analyzer.database_helper as dbh
 import os
-from page_analyzer.validator import validate
+from page_analyzer.validator import validate, parse
 
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 @app.route('/')
@@ -23,8 +24,9 @@ def welcome():
 
 @app.route('/urls', methods=['POST'])
 def add_url():
-    url = request.form.to_dict()
-    errors = validate(url['url'])
+    new_url = request.form.to_dict()
+    parsed_url = parse(new_url['url'])
+    errors = validate(parsed_url)
     if errors:
         if 'no_url' in errors:
             flash(errors["no_url"], 'danger')
@@ -34,17 +36,20 @@ def add_url():
             flash(errors['url_is_too_long'], 'danger')
         if 'url_already_exists' in errors:
             flash(errors['url_already_exists'], 'info')
-            id = url['id']
+            added_url = dbh.get_url_by_name(parsed_url)
+            id = added_url['id']
             return redirect(url_for(get_url, id=id))
         errors = get_flashed_messages(with_categories=True)
         return render_template(
             'search.html',
-            url=url,
+            new_url=new_url,
             errors=errors)
-    url['created_at'] = date.today()
-    dbh.add_url_to_db(url)
+    new_url['created_at'] = date.today()
+    new_url['name'] = parsed_url
+    dbh.add_url_to_db(new_url)
     flash('Страница успешно добавлена', 'success')
-    id = dbh.get_url_by_name(url['name'])['id']
+    added_url = dbh.get_url_by_name(parsed_url)
+    id = added_url['id']
     return redirect(url_for('get_url', id=id))
 
 
@@ -54,6 +59,8 @@ def show_urls():
     return render_template('urls.html', all_urls=all_urls)
 
 
-@app.route('/urls/<id>')
+@app.route('/urls/<int:id>')
 def get_url(id):
-    return render_template('url.html', current_url=dbh.get_url_by_id(id))
+    url = dbh.get_url_by_id(id)
+    errors = get_flashed_messages(with_categories=True)
+    return render_template('url.html', current_url=url, errors=errors)
