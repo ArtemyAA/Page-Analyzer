@@ -13,6 +13,7 @@ def add_url_to_db(new_url):
         curs.execute(
             'INSERT INTO urls (name, created_at) VALUES (%s, %s);',
             (new_url['url'], new_url['created_at']))
+    conn.commit()
     conn.close()
 
 
