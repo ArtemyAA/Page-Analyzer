@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests.exceptions import RequestException
 
+
 def parse(url):
     parsed = urlparse(url)
     normalized = parsed.scheme + '://' + parsed.netloc
@@ -16,11 +17,11 @@ def validate(url):
     if not url:
         errors['no_url'] = 'Url обязателен!'
     elif not check_valid(url):
-        errors['url_not_valid'] = 'Некорректный формат url'
+        errors['url_not_valid'] = 'Некорректный URL'
     elif len(url) > 255:
-        errors['url_is_too_long'] = 'Url не должен быть длиннее 255 символов'
+        errors['url_is_too_long'] = 'URL превышает 255 символов'
     elif not already_exists(url):
-        errors['url_already_exists'] = 'Url уже есть в базе данных'
+        errors['url_already_exists'] = 'Страница уже сщуествует'
     return errors
 
 
