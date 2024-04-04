@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from datetime import date
 import page_analyzer.database_helper as dbh
 import os
-from page_analyzer.validator import validate, parse
+from page_analyzer.validator import validate, parse, get_status_code
 
 load_dotenv()
 app = Flask(__name__)
@@ -37,7 +37,7 @@ def add_url():
             flash(errors['url_already_exists'], 'info')
             added_url = dbh.get_url_by_name(parsed_url)
             id = added_url['id']
-            return redirect(url_for(get_url, id=id))
+            return redirect(url_for('get_url', id=id))
         errors = get_flashed_messages(with_categories=True)
         return render_template(
             'search.html',
@@ -61,5 +61,19 @@ def show_urls():
 @app.route('/urls/<int:id>')
 def get_url(id):
     url = dbh.get_url_by_id(id)
+    checks = dbh.get_check_list(id)
     errors = get_flashed_messages(with_categories=True)
-    return render_template('url.html', current_url=url, errors=errors)
+    return render_template(
+        'url.html',
+        current_url=url,
+        checks=checks,
+        errors=errors)
+
+
+@app.route('/urls/<int:id>/checks', methods=['POST'])
+def check_url(id):
+    url = dbh.get_url_by_id(id)
+    status_code = get_status_code(url['name'])
+    dbh.add_check(id, status_code)
+    flash('Страница успешно проверена', 'success')
+    return redirect(url_for('get_url', id=id))

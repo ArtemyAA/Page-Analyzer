@@ -1,6 +1,7 @@
 from validators import url as check_valid
 from urllib.parse import urlparse
 from page_analyzer.database_helper import already_exists
+import requests
 
 
 def parse(url):
@@ -20,3 +21,9 @@ def validate(url):
     elif not already_exists(url):
         errors['url_already_exists'] = 'Url уже есть в базе данных'
     return errors
+
+
+def get_status_code(url):
+    response = requests.get(url)
+    status_code = response.status_code
+    return status_code

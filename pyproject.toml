@@ -16,6 +16,7 @@ pytest-cov = "^5.0.0"
 python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
 validators = "^0.25.0"
+requests = "^2.31.0"
 
 
 [build-system]

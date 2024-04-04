@@ -22,3 +22,6 @@ lint:
 
 build:
 	./build.sh
+
+set-env:
+	@source .env && export DATABASE_URL
