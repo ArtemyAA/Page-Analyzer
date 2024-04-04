@@ -9,11 +9,10 @@
 #### Installation
 
 Clone the repository:
+
 ```git clone git@github.com:ArtemyAA/python-project-83.git```
 
 #### Usage
-
-To start using analyzer you need:
 
 Install dependencies using bash script and also set the database:
 
@@ -23,7 +22,7 @@ Install dependencies with Poetry:
 
 ```make pack-install```
 
-Start server:
+Start the server:
 
 ```make start```
 
