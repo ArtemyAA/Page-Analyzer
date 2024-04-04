@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from datetime import date
 import page_analyzer.database_helper as dbh
 import os
-from page_analyzer.validator import validate, parse, get_status_code
+from page_analyzer.validator import validate, parse, get_url_info
 
 load_dotenv()
 app = Flask(__name__)
@@ -73,7 +73,8 @@ def get_url(id):
 @app.route('/urls/<int:id>/checks', methods=['POST'])
 def check_url(id):
     url = dbh.get_url_by_id(id)
-    status_code = get_status_code(url['name'])
-    dbh.add_check(id, status_code)
+    status_code, h1, title, description = get_url_info(url['name'])
+    created_at = date.today()
+    dbh.add_check(id, status_code, h1, title, description, created_at)
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('get_url', id=id))

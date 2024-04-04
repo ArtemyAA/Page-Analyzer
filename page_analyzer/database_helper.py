@@ -41,10 +41,10 @@ def get_urls_list():
     conn = psycopg2.connect(DATABASE_URL)
     with conn.cursor(cursor_factory=DictCursor) as curs:
         curs.execute('''
-                    SELECT urls.id, urls.name, MAX(ch.created_at), ch.status_code
+                    SELECT urls.id, urls.name, ch.created_at, ch.status_code
                     FROM urls JOIN url_checks as ch
                     ON urls.id=ch.url_id
-                    GROUP BY urls.id, urls.name, ch.status_code
+                    GROUP BY urls.id, urls.name, ch.created_at, ch.status_code
                     ORDER BY urls.id DESC;
                     ''')
         urls_list = curs.fetchall()
@@ -63,8 +63,8 @@ def already_exists(url):
     return True
 
 
-def add_check(url_id, status_code, h1=None,
-              title=None, description=None, created_at=None):
+def add_check(url_id, status_code, h1,
+              title, description, created_at):
     conn = psycopg2.connect(DATABASE_URL)
     with conn.cursor(cursor_factory=DictCursor) as curs:
         curs.execute(
@@ -79,7 +79,8 @@ def add_check(url_id, status_code, h1=None,
 def get_check_list(id):
     conn = psycopg2.connect(DATABASE_URL)
     with conn.cursor(cursor_factory=DictCursor) as curs:
-        curs.execute('SELECT * FROM url_checks WHERE url_id=(%s) ORDER BY id DESC;', (id,))
+        curs.execute('''SELECT * FROM url_checks
+                    WHERE url_id=(%s) ORDER BY id DESC;''', (id,))
         url_checks = curs.fetchall()
     conn.close()
     return url_checks

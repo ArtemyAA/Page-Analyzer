@@ -2,6 +2,7 @@ from validators import url as check_valid
 from urllib.parse import urlparse
 from page_analyzer.database_helper import already_exists
 import requests
+from bs4 import BeautifulSoup
 
 
 def parse(url):
@@ -23,7 +24,15 @@ def validate(url):
     return errors
 
 
-def get_status_code(url):
+def get_url_info(url):
     response = requests.get(url)
+    response.raise_for_status()
+    response.encoding = 'utf-8'
     status_code = response.status_code
-    return status_code
+    html_content = response.text
+    soup = BeautifulSoup(html_content, 'html.parser')
+    h1 = soup.h1.get_text() if soup.h1 else ''
+    title = soup.title.string if soup.title else ''
+    description_tag = soup.find('meta', attrs={'name': 'description'})
+    description = description_tag['content'] if description_tag else ''
+    return status_code, h1, title, description
