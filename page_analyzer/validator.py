@@ -16,12 +16,12 @@ def validate(url):
     errors = {}
     if not url:
         errors['no_url'] = 'Url обязателен!'
-    elif not check_valid(url):
-        errors['url_not_valid'] = 'Некорректный URL'
     elif len(url) > 255:
         errors['url_is_too_long'] = 'URL превышает 255 символов'
     elif not already_exists(url):
-        errors['url_already_exists'] = 'Страница уже сщуествует'
+        errors['url_already_exists'] = 'Страница уже существует'
+    elif not check_valid(url):
+        errors['url_not_valid'] = 'Некорректный URL'
     return errors
 
 

@@ -29,11 +29,11 @@ def add_url():
     if errors:
         if 'no_url' in errors:
             flash(errors["no_url"], 'danger')
-        if 'url_not_valid' in errors:
+        elif 'url_not_valid' in errors:
             flash(errors['url_not_valid'], 'danger')
-        if 'url_is_too_long' in errors:
+        elif 'url_is_too_long' in errors:
             flash(errors['url_is_too_long'], 'danger')
-        if 'url_already_exists' in errors:
+        elif 'url_already_exists' in errors:
             flash(errors['url_already_exists'], 'info')
             added_url = dbh.get_url_by_name(parsed_url)
             id = added_url['id']
