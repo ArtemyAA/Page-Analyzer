@@ -42,7 +42,7 @@ def add_url():
         return render_template(
             'search.html',
             new_url=new_url,
-            errors=errors)
+            errors=errors), 422
     new_url['created_at'] = date.today()
     new_url['name'] = parsed_url
     dbh.add_url_to_db(new_url)
