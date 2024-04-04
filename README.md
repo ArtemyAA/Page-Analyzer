@@ -10,7 +10,7 @@
 
 Clone the repository:
 
-    bash```bash
+    ```bash
     git clone git@github.com:ArtemyAA/python-project-83.git
     ```
 
@@ -20,20 +20,20 @@ To start using analyzer you need:
 
 Install dependencies using bash script and also set the database:
 
-    bash```bash
+    ```bash
     make build
     ```
 
 Install dependencies with Poetry:
 
-    bash```bash
+    ```bash
     make pack-install
     ```
 
 Start server:
 
-    bash```bash
+    ```bash
     make start
     ```
 
-Now you can enter url in the browser on localhost and parse info from html page. :clap: :clap: :clap:
+#### Now you can enter url in the browser on localhost and parse info from html page. :clap: :clap: :clap:
