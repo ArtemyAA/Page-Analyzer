@@ -4,8 +4,7 @@ from flask import (
     redirect,
     request,
     url_for,
-    flash,
-    get_flashed_messages)
+    flash)
 from dotenv import load_dotenv
 from datetime import date
 import page_analyzer.database_helper as dbh
@@ -37,8 +36,7 @@ def add_url():
                 flash(error_message, 'danger')
         return render_template(
             'search.html',
-            new_url=new_url,
-            message=get_flashed_messages(with_categories=True)), 422
+            new_url=new_url), 422
     elif dbh.already_exists(url_name):
         flash('Страница уже существует', 'info')
         added_url = dbh.get_url_by_name(url_name)
@@ -59,8 +57,7 @@ def show_urls():
     all_urls = dbh.get_urls_list()
     return render_template(
         'urls.html',
-        all_urls=all_urls,
-        message=get_flashed_messages(with_categories=True))
+        all_urls=all_urls)
 
 
 @app.route('/urls/<int:id>')
@@ -70,8 +67,7 @@ def get_url(id):
     return render_template(
         'url.html',
         current_url=url,
-        checks=checks,
-        message=get_flashed_messages(with_categories=True))
+        checks=checks)
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
