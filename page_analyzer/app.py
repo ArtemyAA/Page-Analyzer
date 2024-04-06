@@ -37,8 +37,7 @@ def add_url():
                 flash(error_message, 'danger')
         return render_template(
             'search.html',
-            new_url=new_url,
-            messages=errors), 422
+            new_url=new_url), 422
     elif dbh.already_exists(url_name):
         flash('Страница уже существует', 'info')
         added_url = dbh.get_url_by_name(url_name)
