@@ -36,7 +36,7 @@ def get_html_content(url):
 def parse_html(url):
     content = get_html_content(url)
     if not content:
-        return 0, '', '', ''
+        return None, '', '', ''
     soup = BeautifulSoup(content, 'html.parser')
     h1 = soup.h1.get_text() if soup.h1 else ''
     title = soup.title.string if soup.title else ''

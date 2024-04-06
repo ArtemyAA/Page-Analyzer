@@ -73,7 +73,7 @@ def get_url(id):
 def check_url(id):
     url = dbh.get_url_by_id(id)
     status_code, h1, title, description = parse_html(url['name'])
-    if status_code == 200:
+    if status_code:
         created_at = date.today()
         dbh.add_check(id, status_code, h1, title, description, created_at)
         flash('Страница успешно проверена', 'success')
