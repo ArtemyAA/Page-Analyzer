@@ -35,11 +35,10 @@ def add_url():
                 flash(error_message, 'danger')
             else:
                 flash(error_message, 'danger')
-        messages = get_flashed_messages(with_categories=True)
         return render_template(
             'search.html',
             new_url=new_url,
-            messages=messages), 422
+            message=get_flashed_messages(with_categories=True)), 422
     elif dbh.already_exists(url_name):
         flash('Страница уже существует', 'info')
         added_url = dbh.get_url_by_name(url_name)
@@ -58,19 +57,21 @@ def add_url():
 @app.route('/urls', methods=['GET'])
 def show_urls():
     all_urls = dbh.get_urls_list()
-    return render_template('urls.html', all_urls=all_urls)
+    return render_template(
+        'urls.html',
+        all_urls=all_urls,
+        message=get_flashed_messages(with_categories=True))
 
 
 @app.route('/urls/<int:id>')
 def get_url(id):
     url = dbh.get_url_by_id(id)
     checks = dbh.get_check_list(id)
-    messages = get_flashed_messages(with_categories=True)
     return render_template(
         'url.html',
         current_url=url,
         checks=checks,
-        messages=messages)
+        message=get_flashed_messages(with_categories=True))
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
