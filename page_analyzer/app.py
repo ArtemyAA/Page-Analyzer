@@ -4,7 +4,8 @@ from flask import (
     redirect,
     request,
     url_for,
-    flash)
+    flash,
+    get_flashed_messages)
 from dotenv import load_dotenv
 from datetime import date
 import page_analyzer.database_helper as dbh
@@ -63,10 +64,12 @@ def show_urls():
 def get_url(id):
     url = dbh.get_url_by_id(id)
     checks = dbh.get_check_list(id)
+    messages = get_flashed_messages(category_filter=True)
     return render_template(
         'url.html',
         current_url=url,
-        checks=checks)
+        checks=checks,
+        messages=messages)
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
