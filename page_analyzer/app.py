@@ -64,12 +64,10 @@ def show_urls():
 def get_url(id):
     url = dbh.get_url_by_id(id)
     checks = dbh.get_check_list(id)
-    messages = get_flashed_messages(category_filter=True)
     return render_template(
         'url.html',
         current_url=url,
-        checks=checks,
-        messages=messages)
+        checks=checks)
 
 
 @app.route('/urls/<int:id>/checks', methods=['POST'])
