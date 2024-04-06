@@ -25,21 +25,20 @@ def validate(url):
 def get_html_content(url):
     try:
         response = requests.get(url)
-        response.raise_for_status
+        response.raise_for_status()
         response.encoding = 'utf-8'
         html_content = response.text
-        return html_content
+        return response.status_code, html_content
     except RequestException:
-        return None
+        return None, None
 
 
-def parse_html(url):
-    content = get_html_content(url)
-    if not content:
-        return None, '', '', ''
-    soup = BeautifulSoup(content, 'html.parser')
+def parse_html(html_content):
+    if not html_content:
+        return '', '', ''
+    soup = BeautifulSoup(html_content, 'html.parser')
     h1 = soup.h1.get_text() if soup.h1 else ''
     title = soup.title.string if soup.title else ''
     description_tag = soup.find('meta', attrs={'name': 'description'})
     description = description_tag['content'] if description_tag else ''
-    return 200, h1, title, description
+    return h1, title, description
