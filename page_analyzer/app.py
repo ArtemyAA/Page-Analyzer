@@ -6,14 +6,14 @@ from flask import (
     url_for,
     flash)
 from dotenv import load_dotenv
-from datetime import date
 import page_analyzer.database_helper as dbh
 import os
 from page_analyzer.validator import (
     validate,
     normalize_url,
-    parse_html,
-    get_html_content)
+    parse_html)
+from requests.exceptions import RequestException
+import requests
 
 load_dotenv()
 app = Flask(__name__)
@@ -30,24 +30,18 @@ def add_url():
     new_url = request.form.to_dict()
     url_name = normalize_url(new_url['url'])
     errors = validate(url_name)
+    existed_url = dbh.get_url_by_name(url_name)
     if errors:
-        for error_type, error_message in errors.items():
-            if error_type == 'url_is_too_long':
-                flash(error_message, 'danger')
-            elif error_type == 'url_not_valid':
-                flash(error_message, 'danger')
-            else:
-                flash(error_message, 'danger')
+        for error_message in errors.values():
+            flash(error_message, 'danger')
         return render_template(
             'search.html',
             new_url=new_url), 422
-    elif dbh.already_exists(url_name):
+    elif existed_url:
         flash('Страница уже существует', 'info')
-        added_url = dbh.get_url_by_name(url_name)
-        id = added_url['id']
+        id = existed_url['id']
         return redirect(url_for('get_url', id=id))
     else:
-        new_url['created_at'] = date.today()
         new_url['name'] = url_name
         dbh.add_url_to_db(new_url)
         flash('Страница успешно добавлена', 'success')
@@ -77,12 +71,15 @@ def get_url(id):
 @app.route('/urls/<int:id>/checks', methods=['POST'])
 def check_url(id):
     url = dbh.get_url_by_id(id)
-    status_code, content = get_html_content(url['name'])
-    if status_code:
-        h1, title, description = parse_html(content)
-        created_at = date.today()
-        dbh.add_check(id, status_code, h1, title, description, created_at)
-        flash('Страница успешно проверена', 'success')
-    else:
+    try:
+        response = requests.get(url['name'])
+        response.raise_for_status()
+        response.encoding = 'utf-8'
+        html_content = response.text
+    except RequestException:
         flash('Произошла ошибка при проверке', 'danger')
+        return redirect(url_for('get_url', id=id))
+    h1, title, description = parse_html(html_content)
+    dbh.add_check(id, response.status_code, h1, title, description)
+    flash('Страница успешно проверена', 'success')
     return redirect(url_for('get_url', id=id))

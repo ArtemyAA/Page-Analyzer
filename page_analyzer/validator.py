@@ -1,8 +1,6 @@
 from validators import url as check_valid
 from urllib.parse import urlparse
-import requests
 from bs4 import BeautifulSoup
-from requests.exceptions import RequestException
 
 
 def normalize_url(url):
@@ -20,17 +18,6 @@ def validate(url):
     elif not check_valid(url):
         errors['url_not_valid'] = 'Некорректный URL'
     return errors
-
-
-def get_html_content(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        response.encoding = 'utf-8'
-        html_content = response.text
-        return response.status_code, html_content
-    except RequestException:
-        return None, None
 
 
 def parse_html(html_content):
