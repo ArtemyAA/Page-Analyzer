@@ -9,11 +9,12 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 def add_url_to_db(new_url):
+    created_at = datetime.date.today()
     with psycopg2.connect(DATABASE_URL) as conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(
-                'INSERT INTO urls (name) VALUES (%s);',
-                (new_url['name'],))
+                'INSERT INTO urls (name, created_at) VALUES (%s, %s);',
+                (new_url['name'], created_at))
         conn.commit()
 
 

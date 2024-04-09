@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS urls CASCADE;
 CREATE TABLE urls (
     id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name varchar(255) UNIQUE,
-    created_at date DEFAULT CURRENT_DATE
+    created_at date
 );
 
 
