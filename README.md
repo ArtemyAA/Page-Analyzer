@@ -10,23 +10,27 @@
 
 Clone the repository:
 
-```git clone git@github.com:ArtemyAA/python-project-83.git```
+    ```git clone git@github.com:ArtemyAA/python-project-83.git```
 
 #### Usage
 
-1. Firstly, copy file `.env.sample` в `.env`
+1. Firstly, copy file **.env.sample** in **.env** locally with command:
 
-```cp .env.sample .env```
-2. Fill '.env' file`s keys with needed information. You can see the example in
-key`s definition
-3. Install dependencies using bash script and also set the database
+    ```cp .env.sample .env```
 
-```make build```
-4. Install dependencies with Poetry
+2. Fill **.env** file keys with needed information. You can see the example in
+every key definition
 
-```make pack-install```
+3. Install dependencies using bash script and also set the database:
+
+    ```make build```
+
+4. Install dependencies with Poetry:
+
+    ```make pack-install```
+
 5. Start the server:
 
-```make start```
+    ```make start```
 
 #### Now you can enter url in the browser on localhost and parse info from html page. :clap: :clap: :clap:
