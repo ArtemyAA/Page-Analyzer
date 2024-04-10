@@ -14,15 +14,18 @@ Clone the repository:
 
 #### Usage
 
-Install dependencies using bash script and also set the database:
+1. Firstly, copy file `.env.sample` в `.env`
+
+```cp .env.sample .env```
+2. Fill '.env' file`s keys with needed information. You can see the example in
+key`s definition
+3. Install dependencies using bash script and also set the database
 
 ```make build```
-
-Install dependencies with Poetry:
+4. Install dependencies with Poetry
 
 ```make pack-install```
-
-Start the server:
+5. Start the server:
 
 ```make start```
 

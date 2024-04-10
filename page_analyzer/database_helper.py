@@ -9,13 +9,17 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 def add_url_to_db(new_url):
-    created_at = datetime.date.today()
+    created_at = datetime.datetime.now()
     with psycopg2.connect(DATABASE_URL) as conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(
-                'INSERT INTO urls (name, created_at) VALUES (%s, %s);',
+                '''INSERT INTO urls (name, created_at)
+                VALUES (%s, %s)
+                RETURNING id;''',
                 (new_url['name'], created_at))
+            inserted_id = curs.fetchone()['id']
         conn.commit()
+    return inserted_id
 
 
 def get_url_by_id(id):
@@ -41,29 +45,19 @@ def get_urls_list():
     with psycopg2.connect(DATABASE_URL) as conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute('''
-                        SELECT urls.id, urls.name, c.created_at, c.status_code
-                        FROM urls JOIN url_checks as c
+                        SELECT DISTINCT ON (urls.id)
+                        urls.id, urls.name, c.created_at, c.status_code
+                        FROM urls LEFT JOIN url_checks as c
                         ON urls.id=c.url_id
-                        GROUP BY urls.id, urls.name, c.created_at, c.status_code
-                        ORDER BY urls.id DESC;
+                        ORDER BY urls.id DESC, c.created_at DESC;
                         ''')
             urls_list = curs.fetchall()
             return urls_list
 
 
-def already_exists(url):
-    with psycopg2.connect(DATABASE_URL) as conn:
-        with conn.cursor(cursor_factory=DictCursor) as curs:
-            curs.execute('SELECT * FROM urls WHERE name=(%s);', (url,))
-            check = curs.fetchall()
-            if check:
-                return True
-            return False
-
-
 def add_check(url_id, status_code, h1,
               title, description):
-    created_at = datetime.date.today()
+    created_at = datetime.datetime.now()
     with psycopg2.connect(DATABASE_URL) as conn:
         with conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(

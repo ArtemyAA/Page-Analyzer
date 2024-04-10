@@ -10,10 +10,10 @@ import page_analyzer.database_helper as dbh
 import os
 from page_analyzer.validator import (
     validate,
-    normalize_url,
-    parse_html)
+    normalize_url)
 from requests.exceptions import RequestException
 import requests
+from page_analyzer.html_parser import parse_html
 
 load_dotenv()
 app = Flask(__name__)
@@ -30,23 +30,21 @@ def add_url():
     new_url = request.form.to_dict()
     url_name = normalize_url(new_url['url'])
     errors = validate(url_name)
-    existed_url = dbh.get_url_by_name(url_name)
     if errors:
         for error_message in errors.values():
             flash(error_message, 'danger')
         return render_template(
             'search.html',
             new_url=new_url), 422
-    elif existed_url:
+    existed_url = dbh.get_url_by_name(url_name)
+    if existed_url:
         flash('Страница уже существует', 'info')
         id = existed_url['id']
         return redirect(url_for('get_url', id=id))
     else:
         new_url['name'] = url_name
-        dbh.add_url_to_db(new_url)
+        id = dbh.add_url_to_db(new_url)
         flash('Страница успешно добавлена', 'success')
-        added_url = dbh.get_url_by_name(url_name)
-        id = added_url['id']
         return redirect(url_for('get_url', id=id))
 
 
