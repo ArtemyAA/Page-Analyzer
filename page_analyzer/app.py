@@ -8,7 +8,7 @@ from flask import (
 from dotenv import load_dotenv
 import page_analyzer.database_helper as dbh
 import os
-from page_analyzer.validator import (
+from page_analyzer.url import (
     validate,
     normalize_url)
 from requests.exceptions import RequestException
@@ -41,11 +41,10 @@ def add_url():
         flash('Страница уже существует', 'info')
         id = existed_url['id']
         return redirect(url_for('get_url', id=id))
-    else:
-        new_url['name'] = url_name
-        id = dbh.add_url_to_db(new_url)
-        flash('Страница успешно добавлена', 'success')
-        return redirect(url_for('get_url', id=id))
+    new_url['name'] = url_name
+    id = dbh.add_url_to_db(new_url)
+    flash('Страница успешно добавлена', 'success')
+    return redirect(url_for('get_url', id=id))
 
 
 @app.route('/urls', methods=['GET'])
