@@ -10,7 +10,7 @@
 
 Clone the repository:
 
-```git clone git@github.com:ArtemyAA/python-project-83.git```
+    ```git clone git@github.com:ArtemyAA/python-project-83.git```
 
 #### Usage
 
